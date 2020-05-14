@@ -1,8 +1,9 @@
-import { Injectable, Component, OnInit } from '@angular/core';
+import { Injectable, Component, OnInit, NgZone } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 @Injectable({
-  providedIn: 'root'
+	providedIn: 'root'
 })
 
 @Component({
@@ -13,11 +14,12 @@ import { HttpClient } from '@angular/common/http';
 
 export class RegisterComponent implements OnInit {
 	private SERVER_URL = "http://localhost:3000";
-	private hc: HttpClient;
 
-	constructor(private httpClient: HttpClient) {
-		this.hc = httpClient;
-	}
+	constructor(
+		private nz: NgZone,
+		private router: Router,
+		private hc: HttpClient
+	) { }
 
 	ngOnInit(): void {
 		console.log("Início");
@@ -25,6 +27,15 @@ export class RegisterComponent implements OnInit {
 
 	register(form) {
 		console.log(form.value);
-		this.hc.post(`${this.SERVER_URL}/register`, form.value);
+		this.hc
+			.post(`${this.SERVER_URL}/register`, form.value)
+			.subscribe(
+				data => this.redirs(data),
+				error => console.log('oops', error)
+			);
+	}
+
+	redirs(data){
+		this.nz.run(() => this.router.navigateByUrl('/auth/entrada?result=ok'))
 	}
 }
