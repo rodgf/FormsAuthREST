@@ -21,12 +21,9 @@ export class RegisterComponent implements OnInit {
 		private hc: HttpClient
 	) { }
 
-	ngOnInit(): void {
-		console.log("Início");
-	}
+	ngOnInit(): void { }
 
 	register(form) {
-		console.log(form.value);
 		this.hc
 			.post(`${this.SERVER_URL}/register`, form.value)
 			.subscribe(
