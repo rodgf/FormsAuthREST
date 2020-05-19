@@ -1,8 +1,10 @@
+<br />
 <div class="container">
-  <div class="logo">Create a new account!</div>
+	<div class="logo">Create a new account!</div>
+	
+	<!-- Formulário de Registro -->
   <div class="register-item">
     <form #myform="ngForm" (ngSubmit)="register(myform)" class="form form-register">
-
       <div class="form-field">
         <label class="user" for="register-username"><span class="hidden">Name</span></label>
         <input name="name" id="register-username" type="email" class="form-input" placeholder="Name" ngModel required>

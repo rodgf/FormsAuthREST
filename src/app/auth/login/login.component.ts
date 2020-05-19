@@ -1,6 +1,7 @@
-import { Injectable, Component, OnInit, NgZone } from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+
 //
 @Component({
 	selector: 'app-login',
@@ -8,7 +9,7 @@ import { Router } from '@angular/router';
 	styleUrls: ['./login.component.css']
 })
 
-//
+// Módulo de entrada
 export class LoginComponent implements OnInit {
 	private SERVER_URL = "http://localhost:3000";
 
@@ -21,7 +22,7 @@ export class LoginComponent implements OnInit {
 	ngOnInit(): void {
 	}
 
-	//
+	// Tenta autenticação
 	login(form) {
 		this.hc
 			.post(`${this.SERVER_URL}/login`, form.value)
@@ -31,6 +32,7 @@ export class LoginComponent implements OnInit {
 			);
 	}
 
+	// Redireciona conforme resultado da autenticação
 	redirs(data){
 		if (data.error != undefined) {
 			if (data.status == 404 || data.status == 401)
@@ -38,10 +40,12 @@ export class LoginComponent implements OnInit {
 			else
 				this.nz.run(() => this.router.navigate(['/auth/entrada'], { queryParams: { result: 'erroLogin', msg: data.message} }));
 		} else {
-			if (data.access_token > '')
+			if (data.access_token > '') {
+				localStorage.setItem('logonUser', data.user.name);
 				this.nz.run(() => this.router.navigateByUrl('/auth/entrada?login=ok'))
-			else
+			} else {
 				this.nz.run(() => this.router.navigateByUrl('/auth/entrada?result=erroLogin'))
+			}
 		}
-	}	
+	}
 }

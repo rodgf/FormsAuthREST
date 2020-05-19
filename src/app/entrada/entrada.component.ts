@@ -7,6 +7,7 @@ import { ActivatedRoute } from "@angular/router";
 	templateUrl: './entrada.component.html',
 	styleUrls: ['./entrada.component.css']
 })
+
 export class EntradaComponent implements OnInit {
 	msg: string;
 
@@ -14,17 +15,23 @@ export class EntradaComponent implements OnInit {
 		private nz: NgZone,
 		private router: Router,
 		private route: ActivatedRoute
-	) { }
+	) {}
 
 	ngOnInit(): void {
 		var login = this.route.snapshot.queryParamMap.get("login")
 		var result = this.route.snapshot.queryParamMap.get("result")
 		var msg = this.route.snapshot.queryParamMap.get("msg")
+
+		if (login == "ok" && !localStorage.getItem('logonUser')) {
+			console.log("======> Erro de autenticação.");
+			this.nz.run(() => this.router.navigateByUrl('/'));
+		}
+
 		if (result == "ok") {
 			this.msg = "Registro efetuado com êxito.";
 		}
 		if (login == "ok") {
-			this.msg = "Usuário autenticado.";
+			this.msg = "Usuário autenticado: " + localStorage.getItem('logonUser');
 		} else {
 			if (result == "erroLogin") {
 				if (msg > "")
@@ -37,6 +44,7 @@ export class EntradaComponent implements OnInit {
 
 	//
 	logout() {
+		localStorage.removeItem('logonUser');
 		this.nz.run(() => this.router.navigateByUrl('/'))
 	}
 }

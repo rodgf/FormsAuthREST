@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 	styleUrls: ['./register.component.css']
 })
 
+// Módulo de Registro
 export class RegisterComponent implements OnInit {
 	private SERVER_URL = "http://localhost:3000";
 
@@ -23,6 +24,7 @@ export class RegisterComponent implements OnInit {
 
 	ngOnInit(): void { }
 
+	// Salva registro
 	register(form) {
 		this.hc
 			.post(`${this.SERVER_URL}/register`, form.value)
@@ -32,6 +34,7 @@ export class RegisterComponent implements OnInit {
 			);
 	}
 
+	// Redireciona para tela de entrada
 	redirs(data){
 		this.nz.run(() => this.router.navigateByUrl('/auth/entrada?result=ok'))
 	}
